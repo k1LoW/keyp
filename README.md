@@ -26,7 +26,7 @@ $ keyp update-authorized-keys ubuntu -b stns -u k1low -g developers
 
 ## Support Backend
 
-### GitHub
+### [GitHub](https://github.com/)
 
 ``` console
 $ keyp collect -b github -u alice -u bob -t myorg/administrators
@@ -39,7 +39,7 @@ $ keyp collect -b github -u alice -u bob -t myorg/administrators
 | `GITHUB_TOKEN` | GitHub Personal Access Token (required) |
 | `GITHUB_ENDPOINT` | ( GitHub Enterprise ) GraphQL API Endpoint. ex `https://git.mycompany.com/api/graphql` |
 
-### STNS
+### [STNS](https://stns.jp/)
 
 ``` console
 $ keyp update-authorized-keys ubuntu -b stns -u k1low -g developers
