@@ -6,7 +6,7 @@ keyp is a tool to keep public keys up to date.
 
 ### Collect public keys
 
-Collect public keys from [GitHub](https://github.com/) ( user: `alice`, user: `bob` and team: `myorg/administrators` ).
+Example: Collect public keys from [GitHub](https://github.com/) ( user: `alice`, user: `bob` and team: `myorg/administrators` ).
 
 ``` console
 $ export GITHUB_TOKEN=xxXXXXxxxxXXXXXXxxxXXX
@@ -18,7 +18,7 @@ ssh-rsa AAADAQABAAACAQC8IEt4MqBed/yXQyjUTCZRdZoCUNhm0bEkOV8Ef5TduQvMIPDpBYyYIvFz
 
 ### Update authorized_keys
 
-Update `~/.ssh/authorized_keys` of `ubuntu` user using public keys managed by [STNS](https://stns.jp/).
+Example: Update `~/.ssh/authorized_keys` of `ubuntu` user using public keys managed by [STNS](https://stns.jp/).
 
 ``` console
 $ keyp update-authorized-keys ubuntu -b stns -u k1low -g developers
@@ -51,13 +51,13 @@ $ keyp update-authorized-keys ubuntu -b stns -u k1low -g developers
 
 | key | description |
 | --- | --- |
-| `STNS_API_ENDPOINT` | STNS API Endpoint. ex `https://stns.lolipop.io/v1` |
-| `STNS_AUTH_TOKEN` | token authentication token |
-| `STNS_USER` | basic authentication user |
-| `STNS_PASSWORD` | basic authentication password |
-| `STNS_SKIP_VERIFY` | skip verify certs |
-| `STNS_REQUEST_TIMEOUT` | http request timeout |
-| `STNS_REQUEST_RETRY` | http request of retries |
+| `STNS_API_ENDPOINT` | STNS API endpoint. ex `https://stns.lolipop.io/v1` |
+| `STNS_AUTH_TOKEN` | Token authentication token |
+| `STNS_USER` | Basic authentication user |
+| `STNS_PASSWORD` | Basic authentication password |
+| `STNS_SKIP_VERIFY` | Skip verify certs |
+| `STNS_REQUEST_TIMEOUT` | HTTP request timeout |
+| `STNS_REQUEST_RETRY` | HTTP request of retries |
 
 ## Install
 
