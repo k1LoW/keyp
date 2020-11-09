@@ -24,35 +24,48 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"io/ioutil"
+	"os"
+	"os/user"
+	"path/filepath"
+	"strings"
 
 	"github.com/k1LoW/keyp/backend"
 	"github.com/spf13/cobra"
 )
 
-// collectCmd represents the collect command
-var collectCmd = &cobra.Command{
-	Use:   "collect",
-	Short: "collect keys from backend key store",
-	Long:  `collect keys from backend key store.`,
-	Args:  cobra.NoArgs,
+// updateAuthorizedKeysCmd represents the updateAuthorizedKeys command
+var updateAuthorizedKeysCmd = &cobra.Command{
+	Use:   "update-authorized-keys [USER]",
+	Short: "update [USER_HOME_DIR]/.ssh/authorized_keys",
+	Long:  `update [USER_HOME_DIR]/.ssh/authorized_keys.`,
+	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		ctx := context.Background()
 		keys, err := keys(ctx)
 		if err != nil {
 			return err
 		}
-		for _, k := range keys {
-			cmd.Println(k)
+		u, err := user.Lookup(args[0])
+		if err != nil {
+			return err
 		}
-		return nil
+		if u.HomeDir == "" {
+			return fmt.Errorf("'%s' does not have home directory", u.Name)
+		}
+		aKeys := filepath.Join(u.HomeDir, ".ssh", "authorized_keys")
+		if _, err := os.Stat(aKeys); err != nil {
+			return err
+		}
+		return ioutil.WriteFile(aKeys, []byte(strings.Join(keys, "\n")), 0600)
 	},
 }
 
 func init() {
-	collectCmd.Flags().StringVarP(&b, "backend", "b", "", fmt.Sprintf("backend key store %s (requied)", backend.Backends))
-	collectCmd.Flags().StringSliceVarP(&users, "user", "u", []string{}, "target user")
-	collectCmd.Flags().StringSliceVarP(&groups, "group", "g", []string{}, "target group")
-	collectCmd.Flags().StringSliceVarP(&teams, "team", "t", []string{}, "target org team")
-	collectCmd.MarkFlagRequired("backend")
-	rootCmd.AddCommand(collectCmd)
+	updateAuthorizedKeysCmd.Flags().StringVarP(&b, "backend", "b", "", fmt.Sprintf("backend key store %s (requied)", backend.Backends))
+	updateAuthorizedKeysCmd.Flags().StringSliceVarP(&users, "user", "u", []string{}, "target user")
+	updateAuthorizedKeysCmd.Flags().StringSliceVarP(&groups, "group", "g", []string{}, "target group")
+	updateAuthorizedKeysCmd.Flags().StringSliceVarP(&teams, "team", "t", []string{}, "target org team")
+	updateAuthorizedKeysCmd.MarkFlagRequired("backend")
+	rootCmd.AddCommand(updateAuthorizedKeysCmd)
 }

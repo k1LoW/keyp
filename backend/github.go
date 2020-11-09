@@ -23,6 +23,8 @@ func NewGitHub(ctx context.Context) (*GitHub, error) {
 	httpClient := oauth2.NewClient(ctx, src)
 
 	switch {
+	case strings.Contains(os.Getenv("GITHUB_ENDPOINT"), "https://github.com"):
+		client = githubv4.NewClient(httpClient)
 	case os.Getenv("GITHUB_ENDPOINT") != "":
 		client = githubv4.NewEnterpriseClient(os.Getenv("GITHUB_ENDPOINT"), httpClient)
 	default:

@@ -22,11 +22,14 @@ THE SOFTWARE.
 package cmd
 
 import (
+	"context"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
 
+	"github.com/k1LoW/keyp/backend"
 	"github.com/k1LoW/keyp/version"
 	"github.com/spf13/cobra"
 )
@@ -66,3 +69,40 @@ func Execute() {
 }
 
 func init() {}
+
+func keys(ctx context.Context) ([]string, error) {
+	client, err := backend.New(ctx, b)
+	if err != nil {
+		return nil, err
+	}
+	opts := []backend.Option{}
+	if opt, err := backend.Users(users); err == nil {
+		opts = append(opts, opt)
+	} else {
+		return nil, err
+	}
+	if b == "github" {
+		if opt, err := backend.Teams(teams); err == nil {
+			opts = append(opts, opt)
+		} else {
+			return nil, err
+		}
+	} else {
+		if opt, err := backend.Groups(groups); err == nil {
+			opts = append(opts, opt)
+		} else {
+			return nil, err
+		}
+	}
+
+	keys, err := client.Keys(ctx, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(keys) == 0 {
+		return nil, errors.New("key not found")
+	}
+
+	return keys, nil
+}
