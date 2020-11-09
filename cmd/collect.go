@@ -24,6 +24,7 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"os"
 
 	"github.com/k1LoW/keyp/backend"
 	"github.com/spf13/cobra"
@@ -53,6 +54,9 @@ func init() {
 	collectCmd.Flags().StringSliceVarP(&users, "user", "u", []string{}, "target user")
 	collectCmd.Flags().StringSliceVarP(&groups, "group", "g", []string{}, "target group")
 	collectCmd.Flags().StringSliceVarP(&teams, "team", "t", []string{}, "target org team")
-	collectCmd.MarkFlagRequired("backend")
+	if err := collectCmd.MarkFlagRequired("backend"); err != nil {
+		collectCmd.PrintErrln(err)
+		os.Exit(1)
+	}
 	rootCmd.AddCommand(collectCmd)
 }

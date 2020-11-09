@@ -66,6 +66,9 @@ func init() {
 	updateAuthorizedKeysCmd.Flags().StringSliceVarP(&users, "user", "u", []string{}, "target user")
 	updateAuthorizedKeysCmd.Flags().StringSliceVarP(&groups, "group", "g", []string{}, "target group")
 	updateAuthorizedKeysCmd.Flags().StringSliceVarP(&teams, "team", "t", []string{}, "target org team")
-	updateAuthorizedKeysCmd.MarkFlagRequired("backend")
+	if err := updateAuthorizedKeysCmd.MarkFlagRequired("backend"); err != nil {
+		updateAuthorizedKeysCmd.PrintErrln(err)
+		os.Exit(1)
+	}
 	rootCmd.AddCommand(updateAuthorizedKeysCmd)
 }
