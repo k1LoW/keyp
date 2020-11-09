@@ -1,0 +1,68 @@
+before:
+  hooks:
+    - go mod download
+    - go mod tidy
+builds:
+-
+  id: keyp-linux
+  env:
+    - CGO_ENABLED=0
+  goos:
+    - linux
+  goarch:
+    - amd64
+  ldflags:
+    - -s -w -X github.com/k1LoW/keyp.version={{.Version}} -X github.com/k1LoW/keyp.commit={{.FullCommit}} -X github.com/k1LoW/keyp.date={{.Date}} -X github.com/k1LoW/keyp/version.Version={{.Version}}
+-
+  id: keyp-darwin
+  env:
+    - CGO_ENABLED=0
+  goos:
+    - darwin
+  goarch:
+    - amd64
+  ldflags:
+    - -s -w -X github.com/k1LoW/keyp.version={{.Version}} -X github.com/k1LoW/keyp.commit={{.FullCommit}} -X github.com/k1LoW/keyp.date={{.Date}} -X github.com/k1LoW/keyp/version.Version={{.Version}}
+archives:
+-
+  id: keyp-archive
+  name_template: '{{ .ProjectName }}_v{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
+  format_overrides:
+    - goos: darwin
+      format: zip
+  files:
+    - CREDITS
+    - README.md
+    - CHANGELOG.md
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Version }}-next"
+changelog:
+  skip: true
+brews:
+-
+  name: keyp
+  github:
+    owner: k1LoW
+    name: homebrew-tap
+  commit_author:
+    name: k1LoW
+    email: k1lowxb@gmail.com
+  homepage: https://github.com/k1LoW/keyp
+  description: keyp.
+nfpms:
+  -
+    id: keyp-nfpms
+    file_name_template: "{{ .ProjectName }}_{{ .Version }}-1_{{ .Arch }}"
+    builds:
+    - keyp-linux
+    homepage: https://github.com/k1LoW/keyp
+    maintainer: Ken'ichiro Oyama <k1lowxb@gmail.com>
+    description: keyp.
+    license: MIT
+    formats:
+      - deb
+      - rpm
+    bindir: /usr/bin
+    epoch: 1
