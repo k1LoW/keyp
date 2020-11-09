@@ -2,65 +2,65 @@ package backend
 
 type STNSClientConfig struct {
 	// api_endpoint = "http://api01.example.com/v1"
-	ApiEndpoint string
+	APIEndpoint string `toml:"api_endpoint"`
 	// http_proxy = "http://localhost:8080"
-	HTTPProxy string
+	HTTPProxy string `toml:"http_proxy"`
 	// request_timeout = 3
-	RequestTimeout int
+	RequestTimeout int `toml:"request_timeout"`
 	// request_retry = 1
-	RequestRetry int
+	RequestRetry int `toml:"request_timeout"`
 	// request_locktime = 600
-	RequestLocktime int
+	RequestLocktime int `toml:"request_locktime"`
 	// ssl_verify = true
-	SSLVerify bool
+	SSLVerify bool `toml:"ssl_verify"`
 	// # basic auth
 	// user = "basic_user"
-	User string
+	User string `toml:"user"`
 	// password = "basic_password"
-	Password string
+	Password string `toml:"password"`
 	// # token auth
 	// auth_token = "token"
-	AuthToken string
+	AuthToken string `toml:"auth_token"`
 
 	// query_wrapper = "/usr/local/bin/stns-query-wrapper"
-	QueryWrapper string
+	QueryWrapper string `toml:"query_wrapper"`
 	// chain_ssh_wrapper = "/usr/libexec/openssh/ssh-ldap-wrapper"
-	ChainSSHWrapper string
+	ChainSSHWrapper string `toml:"chain_ssh_wrapper"`
 
 	// cache = true
-	Cache bool
+	Cache bool `toml:"cache"`
 	// cache_dir = "/var/cache/stns/"
-	CacheDir string
+	CacheDir string `toml:"cache_dir"`
 	// cache_ttl = 600
-	CacheTTL int
+	CacheTTL int `toml:"cache_ttl"`
 	// negative_cache_ttl = 600
-	NegativeCacheTTL int
+	NegativeCacheTTL int `toml:"negative_cache_ttl"`
 
 	// uid_shift = 2000
-	UIDShift int
+	UIDShift int `toml:"uid_shift"`
 	// gid_shift = 2000
-	GIDShift int
+	GIDShift int `toml:"gid_shift"`
 
 	// # tls client authentication
 	// [tls]
 	// ca   = "/etc/stns/keys/ca.pem"
 	// cert = "/etc/stns/keys/client.crt"
 	// key  = "/etc/stns/keys/client.key"
-	TLS *TLS
+	TLS *TLS `toml:"tls,omitempty"`
 
 	// [cached]
 	// enable = true
 	// prefetch = true
-	Cached *Cached
+	Cached *Cached `toml:"cached,omitempty"`
 }
 
 type TLS struct {
-	CA   string
-	Cert string
-	Key  string
+	CA   string `toml:"ca"`
+	Cert string `toml:"cert"`
+	Key  string `toml:"key"`
 }
 
 type Cached struct {
-	Enable   bool
-	Prefecth bool
+	Enable   bool `toml:"enable"`
+	Prefecth bool `toml:"prefetch"`
 }
