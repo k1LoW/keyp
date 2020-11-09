@@ -25,6 +25,7 @@ import (
 	"context"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"os/user"
 	"path/filepath"
@@ -41,6 +42,13 @@ var updateAuthorizedKeysCmd = &cobra.Command{
 	Long:  `update [USER_HOME_DIR]/.ssh/authorized_keys.`,
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
+		if logFile != "" {
+			l, err := os.OpenFile(filepath.Clean(logFile), os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644) // #nosec
+			if err != nil {
+				return err
+			}
+			log.SetOutput(l)
+		}
 		ctx := context.Background()
 		keys, err := keys(ctx)
 		if err != nil {
@@ -66,6 +74,7 @@ func init() {
 	updateAuthorizedKeysCmd.Flags().StringSliceVarP(&users, "user", "u", []string{}, "target user")
 	updateAuthorizedKeysCmd.Flags().StringSliceVarP(&groups, "group", "g", []string{}, "target group")
 	updateAuthorizedKeysCmd.Flags().StringSliceVarP(&teams, "team", "t", []string{}, "target org team")
+	updateAuthorizedKeysCmd.Flags().StringVarP(&logFile, "log-file", "", "", "log file path")
 	if err := updateAuthorizedKeysCmd.MarkFlagRequired("backend"); err != nil {
 		updateAuthorizedKeysCmd.PrintErrln(err)
 		os.Exit(1)

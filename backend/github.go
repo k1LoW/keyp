@@ -3,6 +3,7 @@ package backend
 import (
 	"context"
 	"fmt"
+	"log"
 	"os"
 	"strings"
 
@@ -37,6 +38,7 @@ func NewGitHub(ctx context.Context) (*GitHub, error) {
 }
 
 func (b *GitHub) Keys(ctx context.Context, options ...Option) ([]string, error) {
+	users := []string{}
 	keys := []string{}
 	c := &Config{}
 	for _, option := range options {
@@ -60,6 +62,7 @@ func (b *GitHub) Keys(ctx context.Context, options ...Option) ([]string, error) 
 		variables := map[string]interface{}{
 			"user": githubv4.String(u),
 		}
+		users = append(users, u)
 
 		if err := b.client.Query(ctx, &q, variables); err != nil {
 			return nil, err
@@ -82,6 +85,7 @@ func (b *GitHub) Keys(ctx context.Context, options ...Option) ([]string, error) 
 				Team struct {
 					Members struct {
 						Nodes []struct {
+							Login      githubv4.String
 							PublicKeys struct {
 								Edges []struct {
 									Node struct {
@@ -103,11 +107,14 @@ func (b *GitHub) Keys(ctx context.Context, options ...Option) ([]string, error) 
 			return nil, err
 		}
 		for _, u := range q.Org.Team.Members.Nodes {
+			users = append(users, string(u.Login))
 			for _, k := range u.PublicKeys.Edges {
 				keys = append(keys, string(k.Node.Key))
 			}
 		}
 	}
+
+	log.Printf("public keys collected from GitHub %s\n", unique(users))
 
 	return unique(keys), nil
 }

@@ -35,10 +35,11 @@ import (
 )
 
 var (
-	b      string
-	users  []string
-	groups []string
-	teams  []string
+	b       string
+	users   []string
+	groups  []string
+	teams   []string
+	logFile string
 )
 
 var rootCmd = &cobra.Command{
@@ -64,6 +65,7 @@ func Execute() {
 	}
 
 	if err := rootCmd.Execute(); err != nil {
+		log.Println(err)
 		os.Exit(1)
 	}
 }

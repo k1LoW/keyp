@@ -3,6 +3,7 @@ package backend
 import (
 	"context"
 	"io/ioutil"
+	"log"
 	"os"
 
 	"github.com/BurntSushi/toml"
@@ -56,6 +57,7 @@ func NewSTNS() (*STNS, error) {
 
 // Keys ...
 func (b *STNS) Keys(ctx context.Context, options ...Option) ([]string, error) {
+	users := []string{}
 	keys := []string{}
 	c := &Config{}
 	for _, option := range options {
@@ -70,6 +72,7 @@ func (b *STNS) Keys(ctx context.Context, options ...Option) ([]string, error) {
 			return nil, err
 		}
 		keys = append(keys, user.Keys...)
+		users = append(users, u)
 	}
 
 	for _, g := range c.Groups {
@@ -83,8 +86,11 @@ func (b *STNS) Keys(ctx context.Context, options ...Option) ([]string, error) {
 				return nil, err
 			}
 			keys = append(keys, user.Keys...)
+			users = append(users, u)
 		}
 	}
+
+	log.Printf("public keys collected from STNS %s\n", unique(users))
 
 	return unique(keys), nil
 }
