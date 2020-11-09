@@ -31,7 +31,7 @@ func NewSTNS() (*STNS, error) {
 			return nil, err
 		}
 		if endpoint == "" {
-			endpoint = c.ApiEndpoint
+			endpoint = c.APIEndpoint
 		}
 		options.AuthToken = c.AuthToken
 		options.User = c.User
