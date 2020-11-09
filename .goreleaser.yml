@@ -50,7 +50,7 @@ brews:
     name: k1LoW
     email: k1lowxb@gmail.com
   homepage: https://github.com/k1LoW/keyp
-  description: keyp.
+  description: keyp is a tool to keep public keys up to date.
 nfpms:
   -
     id: keyp-nfpms
@@ -59,7 +59,7 @@ nfpms:
     - keyp-linux
     homepage: https://github.com/k1LoW/keyp
     maintainer: Ken'ichiro Oyama <k1lowxb@gmail.com>
-    description: keyp.
+    description: keyp is a tool to keep public keys up to date.
     license: MIT
     formats:
       - deb

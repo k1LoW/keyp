@@ -43,8 +43,8 @@ var (
 
 var rootCmd = &cobra.Command{
 	Use:     "keyp",
-	Short:   "keyp",
-	Long:    `keyp`,
+	Short:   "keyp is a tool to keep public keys up to date",
+	Long:    `keyp is a tool to keep public keys up to date.`,
 	Version: version.Version,
 }
 
