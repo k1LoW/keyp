@@ -42,10 +42,11 @@ var (
 )
 
 var rootCmd = &cobra.Command{
-	Use:     "keyp",
-	Short:   "keyp is a tool to keep public keys up to date",
-	Long:    `keyp is a tool to keep public keys up to date.`,
-	Version: version.Version,
+	Use:          "keyp",
+	Short:        "keyp is a tool to keep public keys up to date",
+	Long:         `keyp is a tool to keep public keys up to date.`,
+	SilenceUsage: true,
+	Version:      version.Version,
 }
 
 func Execute() {
@@ -63,7 +64,6 @@ func Execute() {
 	}
 
 	if err := rootCmd.Execute(); err != nil {
-		rootCmd.PrintErrln(err)
 		os.Exit(1)
 	}
 }
