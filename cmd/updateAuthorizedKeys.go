@@ -71,7 +71,7 @@ var updateAuthorizedKeysCmd = &cobra.Command{
 			return err
 		}
 		if len(keepKeys) > 0 {
-			current, err := ioutil.ReadFile(aKeys)
+			current, err := ioutil.ReadFile(filepath.Clean(aKeys))
 			if err != nil {
 				return err
 			}
