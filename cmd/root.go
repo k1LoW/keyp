@@ -35,11 +35,11 @@ import (
 )
 
 var (
-	b       string
-	users   []string
-	groups  []string
-	teams   []string
-	logFile string
+	b      string
+	users  []string
+	groups []string
+	teams  []string
+	logTo  string
 )
 
 var rootCmd = &cobra.Command{
@@ -54,14 +54,18 @@ func Execute() {
 	rootCmd.SetOut(os.Stdout)
 	rootCmd.SetErr(os.Stderr)
 
+	log.SetFlags(0)
 	log.SetOutput(ioutil.Discard)
 	if env := os.Getenv("DEBUG"); env != "" {
-		debug, err := os.Create(fmt.Sprintf("%s.debug", version.Name))
-		if err != nil {
-			rootCmd.PrintErrln(err)
-			os.Exit(1)
+		log.SetFlags(log.Ldate | log.Ltime | log.Llongfile)
+		if logTo == "" {
+			debug, err := os.Create(fmt.Sprintf("%s.debug", version.Name))
+			if err != nil {
+				rootCmd.PrintErrln(err)
+				os.Exit(1)
+			}
+			log.SetOutput(debug)
 		}
-		log.SetOutput(debug)
 	}
 
 	if err := rootCmd.Execute(); err != nil {

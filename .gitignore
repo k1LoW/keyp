@@ -1,4 +1,5 @@
 keyp
+*.debug
 dist/
 coverage.txt
 .envrc
