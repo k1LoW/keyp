@@ -70,6 +70,21 @@ var updateAuthorizedKeysCmd = &cobra.Command{
 		if _, err := os.Stat(aKeys); err != nil {
 			return err
 		}
+		if len(keepKeys) > 0 {
+			current, err := ioutil.ReadFile(filepath.Clean(aKeys))
+			if err != nil {
+				return err
+			}
+			keeps := []string{}
+			for _, k := range strings.Split(string(current), "\n") {
+				for _, kk := range keepKeys {
+					if k != "" && strings.Contains(k, kk) {
+						keeps = append(keeps, k)
+					}
+				}
+			}
+			keys = append(keeps, keys...)
+		}
 		return ioutil.WriteFile(aKeys, []byte(fmt.Sprintf("%s\n", strings.Join(keys, "\n"))), 0600)
 	},
 }
@@ -79,6 +94,7 @@ func init() {
 	updateAuthorizedKeysCmd.Flags().StringSliceVarP(&users, "user", "u", []string{}, "target user")
 	updateAuthorizedKeysCmd.Flags().StringSliceVarP(&groups, "group", "g", []string{}, "target group")
 	updateAuthorizedKeysCmd.Flags().StringSliceVarP(&teams, "team", "t", []string{}, "target org team")
+	updateAuthorizedKeysCmd.Flags().StringSliceVarP(&keepKeys, "keep-key", "k", []string{}, "substring of the key not to be overwritten on update")
 	updateAuthorizedKeysCmd.Flags().StringVarP(&logTo, "log", "l", "", "log")
 	if err := updateAuthorizedKeysCmd.MarkFlagRequired("backend"); err != nil {
 		updateAuthorizedKeysCmd.PrintErrln(err)
