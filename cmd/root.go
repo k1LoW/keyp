@@ -35,11 +35,12 @@ import (
 )
 
 var (
-	b      string
-	users  []string
-	groups []string
-	teams  []string
-	logTo  string
+	b        string
+	users    []string
+	groups   []string
+	teams    []string
+	keepKeys []string
+	logTo    string
 )
 
 var rootCmd = &cobra.Command{
