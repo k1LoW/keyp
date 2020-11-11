@@ -65,7 +65,7 @@ var updateAuthorizedKeysCmd = &cobra.Command{
 		if _, err := os.Stat(aKeys); err != nil {
 			return err
 		}
-		return ioutil.WriteFile(aKeys, []byte(strings.Join(keys, "\n")), 0600)
+		return ioutil.WriteFile(aKeys, []byte(fmt.Sprintf("%s\n", strings.Join(keys, "\n"))), 0600)
 	},
 }
 
