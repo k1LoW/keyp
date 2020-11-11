@@ -46,6 +46,9 @@ func NewSTNS() (*STNS, error) {
 			options.TLS.Key = c.TLS.Key
 		}
 	}
+
+	log.Printf("backend endpoint: %s\n", endpoint)
+
 	client, err := libstns.NewSTNS(endpoint, options)
 	if err != nil {
 		return nil, err

@@ -17,23 +17,20 @@ type GitHub struct {
 
 // NewGitHub ...
 func NewGitHub(ctx context.Context) (*GitHub, error) {
-	var client *githubv4.Client
 	src := oauth2.StaticTokenSource(
 		&oauth2.Token{AccessToken: os.Getenv("GITHUB_TOKEN")},
 	)
 	httpClient := oauth2.NewClient(ctx, src)
 
-	switch {
-	case strings.Contains(os.Getenv("GITHUB_ENDPOINT"), "https://github.com"):
-		client = githubv4.NewClient(httpClient)
-	case os.Getenv("GITHUB_ENDPOINT") != "":
-		client = githubv4.NewEnterpriseClient(os.Getenv("GITHUB_ENDPOINT"), httpClient)
-	default:
-		client = githubv4.NewClient(httpClient)
+	endpoint := os.Getenv("GITHUB_ENDPOINT")
+	if endpoint == "" {
+		endpoint = "https://api.github.com/graphql"
 	}
 
+	log.Printf("backend endpoint: %s\n", endpoint)
+
 	return &GitHub{
-		client: client,
+		client: githubv4.NewEnterpriseClient(endpoint, httpClient),
 	}, nil
 }
 
