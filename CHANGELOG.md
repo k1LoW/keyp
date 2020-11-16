@@ -1,3 +1,7 @@
+## [v0.5.0](https://github.com/k1LoW/keyp/compare/v0.4.0...v0.5.0) (2020-11-16)
+
+* Add `--create` option to create [USER_HOME_DIR]/.ssh/autorized_keys [#5](https://github.com/k1LoW/keyp/pull/5) ([k1LoW](https://github.com/k1LoW))
+
 ## [v0.4.0](https://github.com/k1LoW/keyp/compare/v0.3.0...v0.4.0) (2020-11-11)
 
 * Add `--keep-key` option to keep keys on update [#4](https://github.com/k1LoW/keyp/pull/4) ([k1LoW](https://github.com/k1LoW))
