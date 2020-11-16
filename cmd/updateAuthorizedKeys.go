@@ -66,11 +66,29 @@ var updateAuthorizedKeysCmd = &cobra.Command{
 		if u.HomeDir == "" {
 			return fmt.Errorf("'%s' does not have home directory", u.Name)
 		}
-		aKeys := filepath.Join(u.HomeDir, ".ssh", "authorized_keys")
+		dotSSHDir := filepath.Join(u.HomeDir, ".ssh")
+		aKeys := filepath.Join(dotSSHDir, "authorized_keys")
 		if _, err := os.Stat(aKeys); err != nil {
-			return err
-		}
-		if len(keepKeys) > 0 {
+			// [USER_HOME_DIR]/.ssh/autorized_keys
+			if !create {
+				return err
+			}
+			if _, err := os.Stat(u.HomeDir); err != nil {
+				return err
+			}
+			if _, err := os.Stat(dotSSHDir); err != nil {
+				if err := os.Mkdir(dotSSHDir, 0700); err != nil {
+					return err
+				}
+			}
+			f, err := os.OpenFile(aKeys, os.O_RDWR|os.O_CREATE, 0600)
+			if err != nil {
+				return err
+			}
+			if err := f.Close(); err != nil {
+				return err
+			}
+		} else if len(keepKeys) > 0 {
 			current, err := ioutil.ReadFile(filepath.Clean(aKeys))
 			if err != nil {
 				return err
@@ -96,6 +114,7 @@ func init() {
 	updateAuthorizedKeysCmd.Flags().StringSliceVarP(&teams, "team", "t", []string{}, "target org team")
 	updateAuthorizedKeysCmd.Flags().StringSliceVarP(&keepKeys, "keep-key", "k", []string{}, "substring of the key not to be overwritten on update")
 	updateAuthorizedKeysCmd.Flags().StringVarP(&logTo, "log", "l", "", "log")
+	updateAuthorizedKeysCmd.Flags().BoolVarP(&create, "create", "c", false, "create [USER_HOME_DIR]/.ssh/autorized_keys when it does not exist.")
 	if err := updateAuthorizedKeysCmd.MarkFlagRequired("backend"); err != nil {
 		updateAuthorizedKeysCmd.PrintErrln(err)
 		os.Exit(1)
