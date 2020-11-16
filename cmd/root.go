@@ -41,6 +41,7 @@ var (
 	teams    []string
 	keepKeys []string
 	logTo    string
+	create   bool
 )
 
 var rootCmd = &cobra.Command{
