@@ -26,6 +26,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"log/syslog"
 	"os"
 	"os/user"
 	"path/filepath"
@@ -47,6 +48,12 @@ var updateAuthorizedKeysCmd = &cobra.Command{
 			log.SetOutput(os.Stdout)
 		case logTo == "stderr":
 			log.SetOutput(os.Stderr)
+		case logTo == "syslog":
+			l, err := syslog.New(syslog.LOG_NOTICE|syslog.LOG_USER, "keyp")
+			if err != nil {
+				return err
+			}
+			log.SetOutput(l)
 		case logTo != "":
 			l, err := os.OpenFile(filepath.Clean(logTo), os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644) // #nosec
 			if err != nil {
