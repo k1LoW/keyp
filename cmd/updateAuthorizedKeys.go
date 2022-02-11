@@ -88,7 +88,7 @@ var updateAuthorizedKeysCmd = &cobra.Command{
 					return err
 				}
 			}
-			f, err := os.OpenFile(aKeys, os.O_RDWR|os.O_CREATE, 0600)
+			f, err := os.OpenFile(filepath.Clean(aKeys), os.O_RDWR|os.O_CREATE, 0600)
 			if err != nil {
 				return err
 			}
